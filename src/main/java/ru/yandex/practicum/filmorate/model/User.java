@@ -22,7 +22,7 @@ public class User {
     public User(String login, String name, String email, LocalDate birthday) {
         this.email = email;
         this.login = login;
-        this.name = name == null | name.equals("") ? login : name;
+        this.name = name == null ? login : name.equals("") ? login : name;
         this.birthday = birthday;
     }
 }

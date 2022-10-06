@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.IdGeneratorFilm;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -17,17 +16,18 @@ import java.util.List;
 @RequestMapping("/films")
 public class FilmController {
     private HashMap<Long, Film> films = new HashMap<>();
+    private long id = 1L;
 
     @GetMapping
-    public List<Film> getFilms() {
+    public List<Film> get() {
         log.info("Список фильмов отправлен");
         return new ArrayList<>(films.values());
     }
 
     @PostMapping
-    public ResponseEntity<Film> addFilm(@Valid @RequestBody Film film) {
+    public ResponseEntity<Film> add(@Valid @RequestBody Film film) {
         if (!films.containsKey(film.getId())) {
-            film.setId(IdGeneratorFilm.getNewId());
+            film.setId(id++);
             films.put(film.getId(), film);
             log.info("Фильм добавлен");
             return new ResponseEntity<>(film, HttpStatus.CREATED);
@@ -35,7 +35,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public ResponseEntity<Film> updateFilm(@Valid @RequestBody Film film) {
+    public ResponseEntity<Film> update(@Valid @RequestBody Film film) {
         if (films.containsKey(film.getId())) {
             films.put(film.getId(), film);
             log.info("Данные фильма обновлены");

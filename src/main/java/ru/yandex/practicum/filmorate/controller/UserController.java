@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.IdGeneratorUser;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -17,17 +16,18 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     private HashMap<Long, User> users= new HashMap<>();
+    private long id = 1L;
 
     @GetMapping
-    public List<User> getUsers() {
+    public List<User> get() {
         log.info("Список пользователей отправлен");
         return new ArrayList<>(users.values());
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@Valid @RequestBody User user)  {
+    public ResponseEntity<User> add(@Valid @RequestBody User user)  {
         if (!users.containsKey(user.getId())) {
-            user.setId(IdGeneratorUser.getNewId());
+            user.setId(id++);
             users.put(user.getId(), user);
             log.info("Пользователь добавлен");
             return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
+    public ResponseEntity<User> update(@Valid @RequestBody User user) {
         if (users.containsKey(user.getId())) {
             users.put(user.getId(), user);
             log.info("Данные пользователя обновлены");

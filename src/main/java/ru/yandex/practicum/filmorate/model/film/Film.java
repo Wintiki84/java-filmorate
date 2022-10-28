@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.model;
+package ru.yandex.practicum.filmorate.model.film;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -7,9 +7,11 @@ import ru.yandex.practicum.filmorate.validators.IsAfter;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-public class Film {
+public class Film implements InFilm {
     @Min(0)
     private long id;
     @NotBlank
@@ -23,11 +25,27 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private Integer duration;
+    private Set<Integer> likes = new HashSet<>();
 
     public Film(String name, String description, LocalDate releaseDate, Integer duration) {
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+    }
+
+    @Override
+    public void addLike(Integer userId) {
+        likes.add(userId);
+    }
+
+    @Override
+    public void deleteLike(Integer userId) {
+        likes.remove(userId);
+    }
+
+    @Override
+    public Set<Integer> getLikes() {
+        return likes;
     }
 }

@@ -54,7 +54,7 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -64,7 +64,7 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -86,7 +86,7 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -96,7 +96,7 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test

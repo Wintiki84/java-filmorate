@@ -53,7 +53,7 @@ class FilmControllerTest {
         mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(film)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -75,7 +75,7 @@ class FilmControllerTest {
         mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(film)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -85,7 +85,7 @@ class FilmControllerTest {
         mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(film)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -95,7 +95,7 @@ class FilmControllerTest {
         mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(film)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test

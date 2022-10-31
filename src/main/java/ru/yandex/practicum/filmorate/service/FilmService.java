@@ -24,7 +24,7 @@ public class FilmService {
     private final InMemoryUserStorage userStorage;
     private Comparator<Film> comparator = Comparator.comparing(obj -> obj.getLikes().size());
 
-    public ResponseEntity<Film> addLike(long idFilm, int userId) {
+    public ResponseEntity<Film> addLike(long idFilm, long userId) {
             if (filmStorage.getFilms().containsKey(idFilm) & userStorage.getUsers().containsKey(userId)) {
                 filmStorage.getFilms().get(idFilm).addLike(userId);
                 log.info("Пользователь с id={} добавил лайк фильму с id={}", userId, idFilm);
@@ -35,7 +35,7 @@ public class FilmService {
             }
     }
 
-    public ResponseEntity<Film> deleteLike(long idFilm, int userId) {
+    public ResponseEntity<Film> deleteLike(long idFilm, long userId) {
             if (filmStorage.getFilms().containsKey(idFilm) & userStorage.getUsers().containsKey(userId)) {
                 filmStorage.getFilms().get(idFilm).deleteLike(userId);
                 log.info("Пользователь с id={} удалил лайк фильму с id={}", userId, idFilm);

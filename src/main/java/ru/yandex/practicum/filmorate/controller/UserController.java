@@ -32,27 +32,27 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable("id") int id) {
+    public ResponseEntity<User> findById(@PathVariable("id") long id) {
         return userService.getUserStorage().findById(id);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<User> addFriend(@Valid @PathVariable int id, @PathVariable int friendId) {
+    public ResponseEntity<User> addFriend(@Valid @PathVariable long id, @PathVariable long friendId) {
         return userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<User> deleteFriend(@Valid @PathVariable int id, @PathVariable int friendId) {
+    public ResponseEntity<User> deleteFriend(@Valid @PathVariable long id, @PathVariable long friendId) {
         return userService.deleteFriend(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
-    public ResponseEntity<Set<User>> getAllFriends(@PathVariable int id) {
+    public ResponseEntity<Set<User>> getAllFriends(@PathVariable long id) {
         return userService.getAllFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public ResponseEntity<Set<User>> getMutualFriends(@Valid @PathVariable int id, @PathVariable int otherId) {
+    public ResponseEntity<Set<User>> getMutualFriends(@Valid @PathVariable long id, @PathVariable long otherId) {
         return userService.getMutualFriends(id, otherId);
     }
 }

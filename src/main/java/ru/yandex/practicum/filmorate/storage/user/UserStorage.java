@@ -9,11 +9,11 @@ import java.util.List;
 public interface UserStorage {
     List<User> getAll();
 
-    HashMap<Integer, User> getUsers();
+    HashMap<Long, User> getUsers();
 
     ResponseEntity<User> add(User user);
 
     ResponseEntity<User> update(User user);
 
-    ResponseEntity<User> findById(int id);
+    ResponseEntity<User> findById(long id);
 }

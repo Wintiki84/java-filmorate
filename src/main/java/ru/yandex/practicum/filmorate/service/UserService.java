@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 public class UserService {
     private final InMemoryUserStorage userStorage;
 
-    public ResponseEntity<User> addFriend(int id, int friendId) {
+    public ResponseEntity<User> addFriend(long id, long friendId) {
             if (userStorage.getUsers().containsKey(id) & userStorage.getUsers().containsKey(friendId)){
                 userStorage.getUsers().get(id).addFriend(friendId);
                 userStorage.getUsers().get(friendId).addFriend(id);
@@ -31,7 +31,7 @@ public class UserService {
             }
     }
 
-    public ResponseEntity<User> deleteFriend(int id, int friendId) {
+    public ResponseEntity<User> deleteFriend(long id, long friendId) {
             if (userStorage.getUsers().containsKey(id) & userStorage.getUsers().containsKey(friendId)){
                 userStorage.getUsers().get(id).deleteFriend(friendId);
                 userStorage.getUsers().get(friendId).deleteFriend(id);
@@ -43,11 +43,11 @@ public class UserService {
             }
     }
 
-    public ResponseEntity<Set<User>> getAllFriends(int id) {
+    public ResponseEntity<Set<User>> getAllFriends(long id) {
             if (userStorage.getUsers().containsKey(id)){
                 log.info("Друзья пользователя с id={} получены", id);
                 Set<User> friends = new HashSet<>();
-                for (int idFriends : userStorage.getUsers().get(id).getFriends()){
+                for (long idFriends : userStorage.getUsers().get(id).getFriends()){
                     friends.add(userStorage.getUsers().get(idFriends));
                 }
                 return new ResponseEntity<>(friends, HttpStatus.OK);
@@ -57,12 +57,12 @@ public class UserService {
             }
     }
 
-    public ResponseEntity<Set<User>> getMutualFriends(int id, int otherId) {
+    public ResponseEntity<Set<User>> getMutualFriends(long id, long otherId) {
             if (userStorage.getUsers().containsKey(id) & userStorage.getUsers().containsKey(otherId)){
                 Set<User> friends = new HashSet<>();
-                Stream<Integer> userStream = userStorage.getUsers().get(id).getFriends().stream();
+                Stream<Long> userStream = userStorage.getUsers().get(id).getFriends().stream();
                 userStream.forEach((userId) -> {
-                    Stream<Integer> otherUserStream = userStorage.getUsers().get(otherId).getFriends().stream();
+                    Stream<Long> otherUserStream = userStorage.getUsers().get(otherId).getFriends().stream();
                     otherUserStream.forEach((otherUserId) -> {
                         if (Objects.equals(userId, otherUserId)) friends.add(userStorage.getUsers().get(userId));
                     });

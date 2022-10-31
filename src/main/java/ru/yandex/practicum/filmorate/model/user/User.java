@@ -8,8 +8,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Data
-public class User implements InUser {
-    private int id;
+public class User {
+    private long id;
     @Email(message = "Неверный формат Email")
     private String email;
     @NotBlank(message = "Не должно быть пустым")
@@ -19,7 +19,7 @@ public class User implements InUser {
     @PastOrPresent(message = "День рождения не может быть в будущем")
     @NotNull
     private LocalDate birthday;
-    private Set<Integer> friends = new HashSet<>();
+    private Set<Long> friends = new HashSet<>();
 
     public User(String login, String name, String email, LocalDate birthday) {
         this.email = email;
@@ -28,18 +28,15 @@ public class User implements InUser {
         this.birthday = birthday;
     }
 
-    @Override
-    public void addFriend(Integer friendId) {
+    public void addFriend(long friendId) {
         friends.add(friendId);
     }
 
-    @Override
-    public void deleteFriend(Integer friendId) {
+    public void deleteFriend(long friendId) {
         friends.remove(friendId);
     }
 
-    @Override
-    public Set<Integer> getFriends() {
+    public Set<Long> getFriends() {
         return friends;
     }
 }

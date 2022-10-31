@@ -14,7 +14,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Component
 public class InMemoryUserStorage implements UserStorage{
-    private final HashMap<Integer, User> users= new HashMap<>();
+    private final HashMap<Long, User> users= new HashMap<>();
     private int id = 1;
 
     @Override
@@ -24,7 +24,7 @@ public class InMemoryUserStorage implements UserStorage{
     }
 
     @Override
-    public HashMap<Integer, User> getUsers(){
+    public HashMap<Long, User> getUsers(){
         return users;
     }
 
@@ -48,7 +48,7 @@ public class InMemoryUserStorage implements UserStorage{
     }
 
     @Override
-    public ResponseEntity<User> findById(@PathVariable int id) {
+    public ResponseEntity<User> findById(@PathVariable long id) {
         if (users.containsKey(id)) {
             User user = users.get(id);
             log.info("Пользователь с ID " + id + " отправлен клиенту");

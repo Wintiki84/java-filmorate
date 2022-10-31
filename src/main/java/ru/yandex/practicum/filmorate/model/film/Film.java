@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class Film implements InFilm {
+public class Film {
     @Min(0)
     private long id;
     @NotBlank
@@ -25,7 +25,7 @@ public class Film implements InFilm {
     private LocalDate releaseDate;
     @Positive
     private Integer duration;
-    private Set<Integer> likes = new HashSet<>();
+    private Set<Long> likes = new HashSet<>();
 
     public Film(String name, String description, LocalDate releaseDate, Integer duration) {
         this.name = name;
@@ -34,18 +34,15 @@ public class Film implements InFilm {
         this.duration = duration;
     }
 
-    @Override
-    public void addLike(Integer userId) {
+    public void addLike(Long userId) {
         likes.add(userId);
     }
 
-    @Override
-    public void deleteLike(Integer userId) {
+    public void deleteLike(Long userId) {
         likes.remove(userId);
     }
 
-    @Override
-    public Set<Integer> getLikes() {
+    public Set<Long> getLikes() {
         return likes;
     }
 }

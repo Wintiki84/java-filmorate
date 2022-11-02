@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.controller.UserController;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.user.User;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -54,7 +54,7 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -64,7 +64,7 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -86,7 +86,7 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -96,7 +96,7 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test

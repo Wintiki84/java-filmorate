@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.yandex.practicum.filmorate.validators.IsAfter;
 
@@ -13,6 +14,7 @@ import java.util.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Film {
     @Min(0)
     @EqualsAndHashCode.Exclude
@@ -32,9 +34,6 @@ public class Film {
     private Set<Genre> genres = new HashSet<>();
     @NotNull
     private Mpa mpa;
-
-    public Film() {
-    }
 
     public Film(long id, String name, String description, LocalDate releaseDate, int duration, int rate, Mpa mpa) {
         this.id = id;

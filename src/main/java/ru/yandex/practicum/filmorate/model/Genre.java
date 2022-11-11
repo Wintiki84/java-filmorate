@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -8,16 +9,11 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Genre {
-
     @Min(1)
-    int id;
+    private int id;
     @NotBlank
     @EqualsAndHashCode.Exclude
-    String name;
-
-    public Genre(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    private String name;
 }

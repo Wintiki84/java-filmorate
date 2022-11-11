@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS genre
 (
-    genre_id INTEGER,
+    genre_id INTEGER NOT NULL,
     name     varchar(50),
     PRIMARY KEY (genre_id)
 );
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS film
 
 CREATE TABLE IF NOT EXISTS mpa
 (
-    mpa_id   INTEGER,
+    mpa_id   INTEGER NOT NULL,
     mpa_name VARCHAR(50),
     PRIMARY KEY (mpa_id)
 );

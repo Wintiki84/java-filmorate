@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,22 +20,12 @@ import java.util.Set;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
     private final GenreStorage genreStorage;
     private final LikesStorage likesStorage;
-
-    @Autowired
-    public FilmService(FilmStorage filmStorage,
-                       UserStorage userStorage,
-                       GenreStorage genreStorage,
-                       LikesStorage likesStorage) {
-        this.filmStorage = filmStorage;
-        this.genreStorage = genreStorage;
-        this.likesStorage = likesStorage;
-        this.userStorage = userStorage;
-    }
 
     public Film addFilm(Film film) {
         long idFilm = filmStorage.addFilm(film);

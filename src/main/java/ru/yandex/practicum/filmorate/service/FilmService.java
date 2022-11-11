@@ -1,57 +1,102 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.model.film.Film;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.exceptions.ModelNotFoundException;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.LikesStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
-@Data
 @RequiredArgsConstructor
 public class FilmService {
-    private final InMemoryFilmStorage filmStorage;
-    private final InMemoryUserStorage userStorage;
-    private Comparator<Film> comparator = Comparator.comparing(obj -> obj.getLikes().size());
+    private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
+    private final GenreStorage genreStorage;
+    private final LikesStorage likesStorage;
 
-    public ResponseEntity<Film> addLike(long idFilm, long userId) {
-            if (filmStorage.getFilms().containsKey(idFilm) & userStorage.getUsers().containsKey(userId)) {
-                filmStorage.getFilms().get(idFilm).addLike(userId);
-                log.info("Пользователь с id={} добавил лайк фильму с id={}", userId, idFilm);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } else {
-                log.info("Пользователь с id={} или фильм с id={} не найден", userId, idFilm);
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+    public Film addFilm(Film film) {
+        long idFilm = filmStorage.addFilm(film);
+        genreStorage.addGenresToFilm(film, idFilm);
+        film.setId(idFilm);
+        return getFilmById(idFilm);
     }
 
-    public ResponseEntity<Film> deleteLike(long idFilm, long userId) {
-            if (filmStorage.getFilms().containsKey(idFilm) & userStorage.getUsers().containsKey(userId)) {
-                filmStorage.getFilms().get(idFilm).deleteLike(userId);
-                log.info("Пользователь с id={} удалил лайк фильму с id={}", userId, idFilm);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } else {
-                log.info("Пользователь с id={} или фильм с id={} не найден", userId, idFilm);
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+    public Film getFilmById(long id) {
+        Film film;
+        try {
+            film = filmStorage.getFilmById(id);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new ModelNotFoundException("Film wasn't found");
+        }
+        film.setLikes(likesStorage.getLikes(id));
+        film.setGenres(getGenresByFilmId(id));
+        return film;
     }
 
-    public ResponseEntity<List<Film>> getMostPopularFilms(int count) {
-        List<Film> sortedFilms = new ArrayList<>(filmStorage.getFilms().values());
-        sortedFilms.sort(comparator);
-        Collections.reverse(sortedFilms);
-        log.info("Топ {} фильмов получены", count);
-        count = Math.min(count, sortedFilms.size());
-        return new ResponseEntity<>(sortedFilms.subList(0, count), HttpStatus.OK);
+    private Set<Genre> getGenresByFilmId(long filmId) {
+        return new HashSet<>(genreStorage.getFilmGenres(filmId));
+    }
+
+    public Film changeFilm(Film film) {
+        try {
+            filmStorage.getFilmById(film.getId());
+        } catch (EmptyResultDataAccessException ex) {
+            throw new ModelNotFoundException("Film wasn't found");
+        }
+        filmStorage.changeFilm(film);
+        genreStorage.changeFilmGenres(film);
+        return film;
+    }
+
+    public void like(long filmId, long userId) {
+        likesStorage.like(filmId, userId);
+    }
+
+    public void deleteLike(long filmId, long userId) {
+        Film film = getFilmById(filmId);
+        if (film.getLikes().contains(userId)) {
+            likesStorage.deleteLike(filmId, userId);
+        } else {
+            throw new ModelNotFoundException("User not found with id " + userId);
+        }
+    }
+
+    public List<Film> getFilms() {
+        List<Film> films = filmStorage.getFilms();
+        films.forEach(this::constructFilm);
+        return films;
+    }
+
+    public List<Film> getPopularFilms(int count) {
+        List<Film> films = likesStorage.getPopularFilms(count);
+        films.forEach(this::constructFilm);
+        return films;
+    }
+
+    public boolean checkDate(Film film) {
+        return film.getReleaseDate().isAfter(LocalDate.of(1895, 12, 28));
+    }
+
+    public void deleteFilm(long id) {
+        getFilmById(id);
+        filmStorage.deleteFilm(id);
+    }
+
+    private void constructFilm(Film film) {
+        film.setGenres(getGenresByFilmId(film.getId()));
+        film.setLikes(likesStorage.getLikes(film.getId()));
     }
 }
